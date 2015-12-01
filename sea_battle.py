@@ -5,13 +5,6 @@ SHIP = 1
 
 board = [[EMPTY_CELL] * BOARD_SIZE for i in range(BOARD_SIZE)]
 
-"""
-Согласно википедии: "Горизонтали обычно нумеруются сверху вниз, а вертикали
-помечаются буквами слева направо"
-диапазон значений по х
-"""
-X_COORD_RANGE = 'abcdefghij'
-
 
 def add_ship(board, x, y):
     """
@@ -42,9 +35,13 @@ def validate_coord(coord):
     False
     >>> validate_coord('z1')
     False
+    >>> validate_coord('a')
+    False
+    >>> validate_coord('ab')
+    False
     """
     try:
         letter, number = coord[0].lower(), int(coord[1:])
     except (ValueError, TypeError):
         return False
-    return letter in X_COORD_RANGE and 1 <= number <= 10
+    return 'a' <= letter <= 'j' and 1 <= number <= 10
