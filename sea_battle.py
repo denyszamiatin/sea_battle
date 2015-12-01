@@ -5,11 +5,12 @@ SHIP = 1
 
 board = [[EMPTY_CELL] * BOARD_SIZE for i in range(BOARD_SIZE)]
 
-# Согласно википедии: "Горизонтали обычно нумеруются сверху вниз, а вертикали помечаются буквами слева направо"
-# диапазон значений по х
+"""
+Согласно википедии: "Горизонтали обычно нумеруются сверху вниз, а вертикали
+помечаются буквами слева направо"
+диапазон значений по х
+"""
 X_COORD_RANGE = 'abcdefghij'
-# диапазон значений по у
-Y_COORD_RANGE = range(1, 11)
 
 
 def add_ship(board, x, y):
@@ -22,34 +23,28 @@ def add_ship(board, x, y):
     """
     board[x][y] = SHIP
 
+
 def validate_coord(coord):
     """
-    проверка правильности координат (формат "MK", где M - в X_COORD_RANGE, K - в Y_COORD_RANGE)
-    >>> coord = 'a1'
-    >>> validate_coord(coord)
+    проверка правильности координат (формат "MK", где M - в X_COORD_RANGE,
+    K - в Y_COORD_RANGE)
+    >>> validate_coord("a1")
     True
-    >>> coord = 'j10'
-    >>> validate_coord(coord)
+    >>> validate_coord('j10')
     True
-    >>> coord = 'E5' # кейс с координатой с заглавной буквой
-    >>> validate_coord(coord)
+    >>> validate_coord('E5') # кейс с координатой с заглавной буквой
     True
-    >>> coord =  True
-    >>> validate_coord(coord)
+    >>> validate_coord(True)
     False
-    >>> coord =  ['a', '1']
-    >>> validate_coord(coord)
+    >>> validate_coord(['a', '1'])
     False
-    >>> coord =  'a11'
-    >>> validate_coord(coord)
+    >>> validate_coord('a11')
     False
-    >>> coord =  'z1'
-    >>> validate_coord(coord)
+    >>> validate_coord('z1')
     False
     """
-    is_valid = False
     try:
-        if coord[0].lower() in X_COORD_RANGE and Y_COORD_RANGE.index(int(coord[1:])) + 1:
-            is_valid = True
-    finally:
-        return is_valid
+        letter, number = coord[0].lower(), int(coord[1:])
+    except (ValueError, TypeError):
+        return False
+    return letter in X_COORD_RANGE and 1 <= number <= 10
