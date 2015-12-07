@@ -48,10 +48,10 @@ def validate_coord(coord):
 
 """
 Для перевода формата нам нужны выдаленые ранее константы, которые
-обозначают номерацию поля
+обозначают номерацию поля по x и по y
 """
 X_COORD_RANGE = list('abcdefghij') # диапазон значений по x
-Y_COORD_RANGE = range(1, 11) ## диапазон значений по y
+Y_COORD_RANGE = range(1, 11) # диапазон значений по y
 
 
 def transform_coord(coord):
