@@ -2,6 +2,8 @@
 BOARD_SIZE = 10
 EMPTY_CELL = 0
 SHIP = 1
+X_COORD_RANGE = 'abcdefghij' # диапазон значений по x
+
 
 board = [[EMPTY_CELL] * BOARD_SIZE for i in range(BOARD_SIZE)]
 
@@ -46,13 +48,6 @@ def validate_coord(coord):
         return False
     return 'a' <= letter <= 'j' and 1 <= number <= 10
 
-"""
-Для перевода формата нам нужны выдаленые ранее константы, которые
-обозначают номерацию поля по x и по y
-"""
-X_COORD_RANGE = list('abcdefghij') # диапазон значений по x
-Y_COORD_RANGE = range(1, 11) # диапазон значений по y
-
 
 def transform_coord(coord):
     """
@@ -67,6 +62,6 @@ def transform_coord(coord):
     >>> transform_coord('j10')
     (9, 9)
     """
-    x_coord_shoot = X_COORD_RANGE.index(coord[0]) #Перевод буквы координаты Х в индекс
-    y_coord_shoot = Y_COORD_RANGE.index(int(coord[1:])) #Перевод числа координаты Y в индекс
-    return x_coord_shoot, y_coord_shoot
+    x = X_COORD_RANGE.index(coord[0])
+    y = int(coord[1:]) - 1
+    return x, y
