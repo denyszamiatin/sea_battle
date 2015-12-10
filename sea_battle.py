@@ -65,3 +65,25 @@ def transform_coord(coord):
     x = X_COORD_RANGE.index(coord[0])
     y = int(coord[1:]) - 1
     return x, y
+
+def x_transform_coord(x, y):
+    """
+    Функция переводит координаты из числовых значений в формат координат игрового
+    поля, для сообщения пользователю о том, куда был сделан выстрел
+    >>> x_transform_coord(3, 4)
+    ('d', 5)
+    >>> x_transform_coord(4, 6)
+    ('e', 7)
+    >>> x_transform_coord(0, 0)
+    ('a', 1)
+    >>> x_transform_coord(9, 9)
+    ('j', 10)
+    """
+    x1 = X_COORD_RANGE[x]
+    y1 = y + 1
+    return x1, y1
+
+
+
+
+
