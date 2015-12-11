@@ -84,3 +84,6 @@ def convert_inner_to_player_coord(x, y):
     letter = X_COORD_RANGE[x]
     number = y + 1
     return letter + str(number)
+
+if __name__ == '__main__':
+    print "Start battle..."
