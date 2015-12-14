@@ -87,5 +87,6 @@ def convert_inner_to_player_coord(x, y):
 
 if __name__ == '__main__':
     print "Start battle..."
-
+#
 # just added this comment for git testing
+#
