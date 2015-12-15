@@ -104,7 +104,6 @@ def validate_ship(coord):
         return False
 
 
-
 def player_shoot(coord):
     """
     Функция, которая получает координаты выстрела и сообщает, есть ли попадание
@@ -121,7 +120,6 @@ def player_shoot(coord):
         print "You hit a ship!"
     else:
         print "You missed!"
-
 
 
 
