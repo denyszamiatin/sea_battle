@@ -66,6 +66,7 @@ def convert_player_to_inner_coord(coord):
     y = int(coord[1:]) - 1
     return x, y
 
+
 def convert_inner_to_player_coord(x, y):
     """
     Функция переводит координаты из числовых значений в формат координат игрового
@@ -85,43 +86,18 @@ def convert_inner_to_player_coord(x, y):
     number = y + 1
     return letter + str(number)
 
-def validate_ship(coord):
+
+def is_ship_in_cell(board, x, y):
     """
     Функция проверяет, есть ли корабль в клетке с заданными координатами
     >>> board = [[0,0,0], [0,0,0], [0,0,0]]
     >>> add_ship(board, 1, 0)
-    >>> validate_ship('a1')
+    >>> is_ship_in_cell(board, 0, 0)
     False
-    >>> validate_ship('a2')
+    >>> is_ship_in_cell(board, 1, 0)
     True
-    >>> validate_ship('b2')
-    False
     """
-    test_ship = convert_player_to_inner_coord(coord)
-    if board[test_ship[1]][test_ship[0]] == SHIP:
-        return True
-    else:
-        return False
-
-
-
-def player_shoot(coord):
-    """
-    Функция, которая получает координаты выстрела и сообщает, есть ли попадание
-    >>> board = [[0,0,0], [0,0,0], [0,0,0]]
-    >>> add_ship(board, 1, 0)
-    >>> player_shoot('a2')
-    You hit a ship!
-    >>> player_shoot('b2')
-    You missed!
-
-    """
-    shoot = convert_player_to_inner_coord(coord)
-    if board[shoot[1]][shoot[0]] == SHIP:
-        print "You hit a ship!"
-    else:
-        print "You missed!"
-
+    return board[x][y] == SHIP
 
 
 if __name__ == '__main__':
