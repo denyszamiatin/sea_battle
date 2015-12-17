@@ -100,6 +100,13 @@ def is_ship_in_cell(board, x, y):
     return board[x][y] == SHIP
 
 
+def print_ship():
+    for row in board:
+        for cell in row:
+                print cell,
+        print
+
+
 if __name__ == '__main__':
     print "Start battle..."
 #
