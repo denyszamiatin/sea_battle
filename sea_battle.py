@@ -101,6 +101,12 @@ def is_ship_in_cell(board, x, y):
 
 
 def print_ship():
+    """
+    Функция инициирует вывод игрового поля
+    """
+    """
+    :return:
+    """
     for row in board:
         for cell in row:
                 print cell,
