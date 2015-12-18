@@ -100,12 +100,9 @@ def is_ship_in_cell(board, x, y):
     return board[x][y] == SHIP
 
 
-def print_ship():
+def print_ship(board):
     """
     Функция инициирует вывод игрового поля
-    """
-    """
-    :return:
     """
     for row in board:
         for cell in row:
@@ -115,5 +112,6 @@ def print_ship():
 
 if __name__ == '__main__':
     print "Start battle..."
+    print_ship(board)
 #
 # just added this comment for git testing
