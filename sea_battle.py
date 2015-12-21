@@ -2,6 +2,8 @@
 BOARD_SIZE = 10
 EMPTY_CELL = 0
 SHIP = 1
+SHOOT = 'X'
+OVERSHOOT = '*'
 X_COORD_RANGE = 'abcdefghij' # диапазон значений по x
 
 
@@ -108,6 +110,26 @@ def print_ship(board):
         for cell in row:
                 print cell,
         print
+
+def shoot_result(board, x, y):
+    """
+    При попадании в корабль отметить корабль как сбитый
+    При промахе, отметить клетку как обстрелянную
+
+    >>> board = [[0,0,0], [0,0,0], [0,0,0]]
+    >>> add_ship(board, 1, 0)
+    >>> shoot_result(board, 0, 0)
+    '*'
+    >>> shoot_result(board, 1, 0)
+    'X'
+
+    """
+    if board[x][y] == SHIP:
+        board[x][y] = SHOOT
+        return board[x][y]
+    else:
+        board[x][y] = OVERSHOOT
+        return board[x][y]
 
 
 def print_board_tmp(board):
