@@ -1,4 +1,6 @@
 # coding=utf-8
+import itertools
+
 BOARD_SIZE = 10
 EMPTY_CELL = 0
 SHIP = 1
@@ -111,115 +113,59 @@ def print_ship(board):
                 print cell,
         print
 
-def shoot_result(board, x, y):
+
+def set_shoot_result(board, x, y):
     """
     При попадании в корабль отметить корабль как сбитый
     При промахе, отметить клетку как обстрелянную
 
     >>> board = [[0,0,0], [0,0,0], [0,0,0]]
     >>> add_ship(board, 1, 0)
-    >>> shoot_result(board, 0, 0)
+    >>> set_shoot_result(board, 0, 0)
+    >>> board[0][0]
     '*'
-    >>> shoot_result(board, 1, 0)
+    >>> set_shoot_result(board, 1, 0)
+    >>> board[1][0]
     'X'
 
     """
-    if board[x][y] == SHIP:
-        board[x][y] = SHOOT
-        return board[x][y]
-    else:
-        board[x][y] = OVERSHOOT
-        return board[x][y]
+    board[x][y] = SHOOT if is_ship_in_cell(board, x, y) else OVERSHOOT
 
 
-def print_board_tmp(board):
-    for i in range (10):
-        for j in range (10):
-            print board[j][i],
-        print
-
-
-def check_coord_for_ship_place(board,ship_coord):
+def check_coord_for_ship_place(board, x, y):
     """
     Here the board with 9 1-deck ships on diagonals with coords: a1,c3,e5,g7,i9 and a10,c8,g4,i2
-    >>> board=[[1, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    >>> check_coord_for_ship_place(board,'a1')
+    >>> board=[[1, 0, 0, 0, 0, 0, 0, 0, 0, 1], \
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], \
+               [0, 0, 1, 0, 0, 0, 0, 1, 0, 0], \
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], \
+               [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], \
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], \
+               [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], \
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], \
+               [0, 1, 0, 0, 0, 0, 0, 0, 1, 0], \
+               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    >>> check_coord_for_ship_place(board, 0, 0)
     False
-    >>> check_coord_for_ship_place(board,'j10')
+    >>> check_coord_for_ship_place(board, 9, 9)
     False
-    >>> check_coord_for_ship_place(board,'a2')
+    >>> check_coord_for_ship_place(board, 0, 1)
     False
-    >>> check_coord_for_ship_place(board,'e7')
+    >>> check_coord_for_ship_place(board, 4, 6)
     True
-    >>> check_coord_for_ship_place(board,'e3')
+    >>> check_coord_for_ship_place(board, 4, 2)
     True
-    >>> check_coord_for_ship_place(board,'e10')
+    >>> check_coord_for_ship_place(board, 4, 9)
     True
     """
+    near_places = tuple(itertools.product(range(-1, 2), repeat=2))
 
-    if not validate_player_coord(ship_coord):
-        print 'Not valid ship coordinate...'
-        exit()
-    # translating to inner coordinates
-    converted_coord = convert_player_to_inner_coord(ship_coord)
-    x,y = converted_coord
-    #print x, y
+    coords_to_check = [
+        (x + sx, y + sy) for sx, sy in near_places
+        if 0 <= x + sx <= BOARD_SIZE - 1 and 0 <= y + sy <= BOARD_SIZE - 1
+    ]
 
-    # sub-function to check near points
-    def near_points_check(near_coords):
-        allow_ship_place=True
-        for i in near_coords:
-            #x1=i[0]; y1=i[1]
-            #print x1,y1
-            if board[i[0]][i[1]]== SHIP:
-                allow_ship_place=False
-        #print allow_ship_place
-        return allow_ship_place
-
-    if x!=0 and x!=9 and y!=0 and y!=9:
-        near_coords_9=[(x,y+1),(x,y),(x,y-1),(x-1,y+1),(x-1,y),(x-1,y-1),(x+1,y+1),(x+1,y),(x+1,y-1)]
-        #print '9_points_for_check', near_coords_9
-        print near_points_check(near_coords_9)
-
-    elif x==0 and y!=0 and y!=9:
-        near_coords_6_x0=[(x,y+1),(x,y),(x,y-1),(x+1,y+1),(x+1,y),(x+1,y-1)]
-        #print 'x0_6_points_for_check', near_coords_6_x0
-        print near_points_check(near_coords_6_x0)
-
-    elif x==9 and y!=0 and y!=9:
-        near_coords_6_x9=[(x,y+1),(x,y),(x,y-1),(x-1,y+1),(x-1,y),(x-1,y-1)]
-        #print 'x9_6_points_for_check', near_coords_6_x9
-        print near_points_check(near_coords_6_x9)
-
-    elif y==0 and x!=0 and x!=9:
-        near_coords_6_y0=[(x-1,y),(x,y),(x+1,y),(x-1,y+1),(x,y+1),(x+1,y+1)]
-        #print 'y0_6_points_for_check', near_coords_6_y0
-        print near_points_check(near_coords_6_y0)
-
-    elif y==9 and x!=0 and x!=9:
-        near_coords_6_y9=[(x-1,y),(x,y),(x+1,y),(x-1,y-1),(x,y-1),(x+1,y-1)]
-        #print 'y9_6_points_for_check', near_coords_6_y9
-        print near_points_check(near_coords_6_y9)
-
-    elif x==0 and y==0:
-        near_coords_4_x0y0=[(x,y),(x+1,y),(x,y+1),(x+1,y+1)]
-        #print 'x0y0_4_points_for_check', near_coords_4_x0y0
-        print near_points_check(near_coords_4_x0y0)
-
-    elif x==9 and y==0:
-        near_coords_4_x9y0=[(x-1,y),(x,y),(x-1,y+1),(x,y+1)]
-        #print 'x0y0_4_points_for_check', near_coords_4_x9y0
-        print near_points_check(near_coords_4_x9y0)
-
-    elif x==9 and y==9:
-        near_coords_4_x9y9=[(x-1,y),(x,y),(x,y-1),(x-1,y-1)]
-        #print 'x9y9_4_points_for_check', near_coords_4_x9y9
-        print near_points_check(near_coords_4_x9y9)
-
-    elif x==0 and y==9:
-        near_coords_4_x0y9=[(x+1,y),(x,y),(x,y-1),(x+1,y-1)]
-        #print 'x0y9_4_points_for_check', near_coords_4_x0y9
-        print near_points_check(near_coords_4_x0y9)
+    return not any([is_ship_in_cell(board, x, y) for x, y in coords_to_check])
 
 
 if __name__ == '__main__':
@@ -227,12 +173,18 @@ if __name__ == '__main__':
     print_ship(board)
     print
 
-    board=[[1, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    board = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+             [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+             [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+             [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+             [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
     print 'Here the board with 9 1-deck ships on diagonals with coords: a1,c3,e5,g7,i9 and a10,c8,g4,i2'
-    print_board_tmp(board)
     print
     print 'Checking e10 coordinate:'
-    check_coord_for_ship_place(board,'e10')
-    print 'Checking bad e11 coordinate:'
-    check_coord_for_ship_place(board,'e11')
+    check_coord_for_ship_place(board, 4, 9)
 
