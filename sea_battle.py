@@ -188,3 +188,4 @@ if __name__ == '__main__':
     print 'Checking e10 coordinate:'
     check_coord_for_ship_place(board, 4, 9)
 
+# Git test
